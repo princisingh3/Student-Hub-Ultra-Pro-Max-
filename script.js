@@ -1,142 +1,227 @@
-// Dark Mode
+// =====================
+// DARK MODE
+// =====================
 
 const darkModeBtn = document.getElementById("darkModeBtn");
 
-if(darkModeBtn){
-  darkModeBtn.addEventListener("click", () => {
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+}
+
+darkModeBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
-    localStorage.setItem(
-      "theme",
-      document.body.classList.contains("dark-mode") ? "dark" : "light"
-    );
-  });
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+});
+
+
+// =====================
+// NOTES PAD
+// =====================
+
+function saveNotes() {
+    const notes = document.getElementById("notesBox").value;
+    localStorage.setItem("student_notes", notes);
+    alert("Notes Saved Successfully!");
 }
 
-if(localStorage.getItem("theme") === "dark"){
-  document.body.classList.add("dark-mode");
+function loadNotes() {
+    document.getElementById("notesBox").value =
+        localStorage.getItem("student_notes") || "";
 }
 
-// Task Manager
+window.onload = function () {
+    loadNotes();
+    loadTasks();
+    loadGoal();
+};
+
+
+// =====================
+// TODO MANAGER
+// =====================
 
 function addTask() {
-  const input = document.getElementById("taskInput");
-  const list = document.getElementById("taskList");
 
-  if(!input || !list) return;
+    const taskInput = document.getElementById("taskInput");
+    const task = taskInput.value.trim();
 
-  if(input.value.trim() === "") return;
+    if (task === "") {
+        alert("Enter a task!");
+        return;
+    }
 
-  const li = document.createElement("li");
+    const li = document.createElement("li");
 
-  li.innerHTML =
-    input.value +
-    ` <button onclick="this.parentElement.remove();saveTasks()">❌</button>`;
+    li.innerHTML = `
+        ${task}
+        <button onclick="deleteTask(this)">❌</button>
+    `;
 
-  list.appendChild(li);
+    document.getElementById("taskList").appendChild(li);
 
-  saveTasks();
-  input.value = "";
+    taskInput.value = "";
+
+    saveTasks();
 }
 
-function saveTasks(){
-  const list = document.getElementById("taskList");
-  if(list){
-    localStorage.setItem("tasks", list.innerHTML);
-  }
+function deleteTask(btn) {
+    btn.parentElement.remove();
+    saveTasks();
 }
 
-function loadTasks(){
-  const list = document.getElementById("taskList");
-  if(list){
-    list.innerHTML = localStorage.getItem("tasks") || "";
-  }
+function saveTasks() {
+    localStorage.setItem(
+        "student_tasks",
+        document.getElementById("taskList").innerHTML
+    );
 }
 
-loadTasks();
-
-// Attendance Calculator
-
-function calculateAttendance(){
-  let attended = parseInt(document.getElementById("attended").value);
-  let total = parseInt(document.getElementById("total").value);
-
-  if(!attended || !total){
-    alert("Enter values");
-    return;
-  }
-
-  let percentage = ((attended / total) * 100).toFixed(2);
-
-  document.getElementById("attendanceResult").innerHTML =
-    "Attendance: " + percentage + "%";
+function loadTasks() {
+    document.getElementById("taskList").innerHTML =
+        localStorage.getItem("student_tasks") || "";
 }
 
-// CGPA Calculator
 
-function calculateCGPA(){
-  let marks = document.getElementById("cgpaInput").value;
+// =====================
+// ATTENDANCE
+// =====================
 
-  if(!marks) return;
+function calculateAttendance() {
 
-  let cgpa = (marks / 9.5).toFixed(2);
+    const attended =
+        parseFloat(document.getElementById("attended").value);
 
-  document.getElementById("cgpaResult").innerHTML =
-    "CGPA: " + cgpa;
+    const total =
+        parseFloat(document.getElementById("total").value);
+
+    if (!attended || !total) {
+        alert("Enter valid values");
+        return;
+    }
+
+    const percentage =
+        ((attended / total) * 100).toFixed(2);
+
+    document.getElementById("attendanceResult").innerHTML =
+        `Attendance: ${percentage}%`;
 }
 
-// Pomodoro Timer
+
+// =====================
+// CGPA CALCULATOR
+// =====================
+
+function calculateCGPA() {
+
+    const percentage =
+        parseFloat(document.getElementById("cgpaInput").value);
+
+    if (!percentage) {
+        alert("Enter percentage");
+        return;
+    }
+
+    const cgpa = (percentage / 9.5).toFixed(2);
+
+    document.getElementById("cgpaResult").innerHTML =
+        `CGPA: ${cgpa}`;
+}
+
+
+// =====================
+// POMODORO TIMER
+// =====================
 
 let time = 1500;
 let timer;
 
-function startTimer(){
+function startTimer() {
 
-  clearInterval(timer);
+    clearInterval(timer);
 
-  timer = setInterval(() => {
+    timer = setInterval(() => {
 
-    let min = Math.floor(time / 60);
-    let sec = time % 60;
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
 
-    document.getElementById("timer").innerHTML =
-      String(min).padStart(2,"0") +
-      ":" +
-      String(sec).padStart(2,"0");
+        document.getElementById("timer").textContent =
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0");
 
-    time--;
+        time--;
 
-    if(time < 0){
-      clearInterval(timer);
-      alert("Session Complete!");
-      time = 1500;
+        if (time < 0) {
+
+            clearInterval(timer);
+
+            alert("🎉 Pomodoro Session Complete!");
+
+            time = 1500;
+
+            document.getElementById("timer").textContent = "25:00";
+        }
+
+    }, 1000);
+}
+
+
+// =====================
+// EXAM COUNTDOWN
+// =====================
+
+function countdown() {
+
+    const examDate =
+        document.getElementById("examDate").value;
+
+    if (!examDate) {
+        alert("Select Exam Date");
+        return;
     }
 
-  },1000);
+    const exam = new Date(examDate);
+    const today = new Date();
+
+    const diff = exam - today;
+
+    const days =
+        Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+    if (days < 0) {
+        document.getElementById("result").innerHTML =
+            "Exam Date Passed!";
+    } else {
+        document.getElementById("result").innerHTML =
+            `📅 ${days} Days Remaining`;
+    }
 }
 
-// Exam Countdown
 
-function countdown(){
+// =====================
+// STUDY PLANNER
+// =====================
 
-  let examDate =
-    document.getElementById("examDate").value;
+function saveGoal() {
 
-  if(!examDate) return;
+    const goal =
+        document.getElementById("goalInput").value;
 
-  let exam = new Date(examDate);
-  let today = new Date();
+    localStorage.setItem("study_goal", goal);
 
-  let diff = exam - today;
-
-  let days =
-    Math.ceil(diff / (1000*60*60*24));
-
-  document.getElementById("result").innerHTML =
-    days + " Days Remaining";
+    document.getElementById("goalResult").innerHTML =
+        "✅ Goal Saved";
 }
 
-// Feature Button
+function loadGoal() {
 
-function showFeature(name){
-  alert("Opening " + name);
+    const goal =
+        localStorage.getItem("study_goal") || "";
+
+    document.getElementById("goalInput").value = goal;
 }
