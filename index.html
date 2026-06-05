@@ -1,71 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Ultra Pro Max</title>
-
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3b82f6">
-</head>
-<body>
-
-<header>
-    <h1>🎓 Student Hub Ultra Pro Max</h1>
-    <p>All-in-One Student Productivity App</p>
-    <button id="darkModeBtn">🌙 Dark Mode</button>
-</header>
-
 <div class="container">
 
+    <!-- Notes -->
     <div class="card">
         <h3>📝 NotesPad</h3>
-        <p>Save and manage notes.</p>
-        <button onclick="showFeature('NotesPad')">Open</button>
+        <textarea id="notes" rows="6" placeholder="Write your notes here..."></textarea>
+        <button onclick="localStorage.setItem('notes',document.getElementById('notes').value)">
+            Save Notes
+        </button>
     </div>
 
+    <!-- Todo -->
     <div class="card">
         <h3>✅ To-Do Manager</h3>
-        <p>Track daily tasks.</p>
-        <button onclick="showFeature('To-Do Manager')">Open</button>
+
+        <input type="text" id="taskInput" placeholder="Enter Task">
+
+        <button onclick="addTask()">Add Task</button>
+
+        <ul id="taskList"></ul>
     </div>
 
+    <!-- Attendance -->
     <div class="card">
         <h3>📊 Attendance Calculator</h3>
-        <p>Calculate attendance percentage.</p>
-        <button onclick="showFeature('Attendance Calculator')">Open</button>
+
+        <input type="number" id="attended" placeholder="Classes Attended">
+
+        <input type="number" id="total" placeholder="Total Classes">
+
+        <button onclick="calculateAttendance()">
+            Calculate
+        </button>
+
+        <p id="attendanceResult"></p>
     </div>
 
+    <!-- CGPA -->
     <div class="card">
         <h3>🎓 CGPA Calculator</h3>
-        <p>Calculate your CGPA.</p>
-        <button onclick="showFeature('CGPA Calculator')">Open</button>
+
+        <input type="number" id="cgpaInput"
+               placeholder="Enter Percentage">
+
+        <button onclick="calculateCGPA()">
+            Calculate CGPA
+        </button>
+
+        <p id="cgpaResult"></p>
     </div>
 
+    <!-- Pomodoro -->
     <div class="card">
         <h3>⏱️ Pomodoro Timer</h3>
-        <p>Boost study focus.</p>
-        <button onclick="showFeature('Pomodoro Timer')">Open</button>
+
+        <h2 id="timer">25:00</h2>
+
+        <button onclick="startTimer()">
+            Start Timer
+        </button>
     </div>
 
+    <!-- Exam Countdown -->
     <div class="card">
-        <h3>📅 Study Planner</h3>
-        <p>Plan your study schedule.</p>
-        <button onclick="showFeature('Study Planner')">Open</button>
+        <h3>📅 Exam Countdown</h3>
+
+        <input type="date" id="examDate">
+
+        <button onclick="countdown()">
+            Calculate
+        </button>
+
+        <p id="result"></p>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="card">
+        <h3>📈 Progress Dashboard</h3>
+
+        <p>Total Features</p>
+
+        <h2>6+</h2>
+
+        <p>Ultra Pro Max Edition</p>
+    </div>
+
+    <!-- Study Planner -->
+    <div class="card">
+        <h3>📚 Study Planner</h3>
+
+        <input type="text"
+               placeholder="Today's Study Goal">
+
+        <button>
+            Save Goal
+        </button>
     </div>
 
 </div>
-
-<script src="script.js"></script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("Service Worker Registered"))
-      .catch((err) => console.log(err));
-  });
-}
-</script>
-</body>
-</html>
