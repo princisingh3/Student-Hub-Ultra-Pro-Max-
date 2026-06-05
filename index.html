@@ -1,99 +1,164 @@
-<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Hub Ultra Pro Max</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4f46e5">
+</head>
+
+<body>
+
+<header>
+    <h1>🎓 Student Hub Ultra Pro Max</h1>
+    <p>All-in-One Student Productivity Dashboard</p>
+    <button id="darkModeBtn">🌙 Dark Mode</button>
+</header>
+
+<main class="container">
 
     <!-- Notes -->
-    <div class="card">
-        <h3>📝 NotesPad</h3>
-        <textarea id="notes" rows="6" placeholder="Write your notes here..."></textarea>
-        <button onclick="localStorage.setItem('notes',document.getElementById('notes').value)">
+    <section class="card">
+        <h2>📝 NotesPad</h2>
+
+        <textarea id="notesBox"
+        placeholder="Write your notes here..."></textarea>
+
+        <button onclick="saveNotes()">
             Save Notes
         </button>
-    </div>
+
+        <button onclick="loadNotes()">
+            Load Notes
+        </button>
+    </section>
 
     <!-- Todo -->
-    <div class="card">
-        <h3>✅ To-Do Manager</h3>
+    <section class="card">
+        <h2>✅ To-Do Manager</h2>
 
-        <input type="text" id="taskInput" placeholder="Enter Task">
+        <input
+        type="text"
+        id="taskInput"
+        placeholder="Enter Task">
 
-        <button onclick="addTask()">Add Task</button>
+        <button onclick="addTask()">
+            Add Task
+        </button>
 
         <ul id="taskList"></ul>
-    </div>
+    </section>
 
     <!-- Attendance -->
-    <div class="card">
-        <h3>📊 Attendance Calculator</h3>
+    <section class="card">
+        <h2>📊 Attendance Calculator</h2>
 
-        <input type="number" id="attended" placeholder="Classes Attended">
+        <input
+        type="number"
+        id="attended"
+        placeholder="Classes Attended">
 
-        <input type="number" id="total" placeholder="Total Classes">
+        <input
+        type="number"
+        id="total"
+        placeholder="Total Classes">
 
         <button onclick="calculateAttendance()">
             Calculate
         </button>
 
         <p id="attendanceResult"></p>
-    </div>
+    </section>
 
     <!-- CGPA -->
-    <div class="card">
-        <h3>🎓 CGPA Calculator</h3>
+    <section class="card">
+        <h2>🎓 CGPA Calculator</h2>
 
-        <input type="number" id="cgpaInput"
-               placeholder="Enter Percentage">
+        <input
+        type="number"
+        id="cgpaInput"
+        placeholder="Enter Percentage">
 
         <button onclick="calculateCGPA()">
             Calculate CGPA
         </button>
 
         <p id="cgpaResult"></p>
-    </div>
+    </section>
 
     <!-- Pomodoro -->
-    <div class="card">
-        <h3>⏱️ Pomodoro Timer</h3>
+    <section class="card">
+        <h2>⏱️ Pomodoro Timer</h2>
 
-        <h2 id="timer">25:00</h2>
+        <h1 id="timer">25:00</h1>
 
         <button onclick="startTimer()">
             Start Timer
         </button>
-    </div>
+    </section>
 
     <!-- Exam Countdown -->
-    <div class="card">
-        <h3>📅 Exam Countdown</h3>
+    <section class="card">
+        <h2>📅 Exam Countdown</h2>
 
-        <input type="date" id="examDate">
+        <input
+        type="date"
+        id="examDate">
 
         <button onclick="countdown()">
-            Calculate
+            Check Days
         </button>
 
         <p id="result"></p>
-    </div>
+    </section>
 
     <!-- Dashboard -->
-    <div class="card">
-        <h3>📈 Progress Dashboard</h3>
+    <section class="card">
+        <h2>📈 Progress Dashboard</h2>
 
-        <p>Total Features</p>
+        <div class="stats">
+            <div class="stat-box">
+                <h3>6+</h3>
+                <p>Features</p>
+            </div>
 
-        <h2>6+</h2>
-
-        <p>Ultra Pro Max Edition</p>
-    </div>
+            <div class="stat-box">
+                <h3>100%</h3>
+                <p>Offline Ready</p>
+            </div>
+        </div>
+    </section>
 
     <!-- Study Planner -->
-    <div class="card">
-        <h3>📚 Study Planner</h3>
+    <section class="card">
+        <h2>📚 Study Planner</h2>
 
-        <input type="text"
-               placeholder="Today's Study Goal">
+        <input
+        type="text"
+        id="goalInput"
+        placeholder="Today's Goal">
 
-        <button>
+        <button onclick="saveGoal()">
             Save Goal
         </button>
-    </div>
 
-</div>
+        <p id="goalResult"></p>
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js");
+    });
+}
+</script>
+
+</body>
+            </html>
